@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Turnos.C.Models.ViewModels.TurnoProfesionalViewModel>
+
+@{
+    ViewData["Title"] = "Turnos del Profesional";
+    var nombreProfesional = ViewBag.ProfesionalNombre as string ?? "Profesional";
+}
+
+<div class="container">
+    <h2 class="mb-4 text-primary">Turnos de @nombreProfesional</h2>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mensaje"]</div>
+    }
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger">@TempData["MensajeError"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No se encontraron turnos asignados a este profesional.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Paciente</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var turno in Model)
+                {
+                    <tr>
+                        <td>@turno.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@turno.Fecha.ToString("HH:mm") hs</td>
+                        <td><span class="@turno.ClaseEstado">@turno.Estado</span></td>
+                        <td>@turno.PacienteNombre</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@turno.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-sm btn-info me-1">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@turno.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-sm btn-danger me-1">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+
+                            @if (turno.Estado != "Cancelado" && turno.Estado != "Finalizado")
+                            {
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm btn-cancelar me-1"
+                                        data-action="@Url.Action("CancelarTurnoIndividual", "Turnos", new { id = turno.Id })"
+                                        data-return-url="@Context.Request.Path">
+                                    Cancelar
+                                </button>
+
+                                @if (turno.Estado == "Pendiente de confirmación")
+                                {
+                                    <form asp-action="ConfirmarTurnoIndividual"
+                                          asp-route-id="@turno.Id"
+                                          asp-route-returnUrl="@Context.Request.Path"
+                                          method="post"
+                                          class="d-inline">
+                                        <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                                    </form>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="mt-3">
+        <a asp-action="@ViewBag.ReturnUrl" asp-controller="Profesionales" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Profesionales
+        </a>
+    </div>
+</div>
+
+<!-- Modal de cancelación -->
+<div class="modal fade" id="modalCancelacion" tabindex="-1" aria-labelledby="modalCancelacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formCancelacion" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancelar turno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Motivo de cancelación:</label>
+                        <input type="text" name="descripcionCancelacion" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalElement = document.getElementById("modalCancelacion");
+            const modal = new bootstrap.Modal(modalElement);
+            const form = document.getElementById("formCancelacion");
+
+            document.querySelectorAll(".btn-cancelar").forEach(button => {
+                button.addEventListener("click", function () {
+                    const action = button.getAttribute("data-action");
+                    const returnUrl = button.getAttribute("data-return-url");
+
+                    form.action = action;
+
+                    form.querySelectorAll("input[name='returnUrl']").forEach(el => el.remove());
+
+                    if (returnUrl) {
+                        const inputHidden = document.createElement("input");
+                        inputHidden.type = "hidden";
+                        inputHidden.name = "returnUrl";
+                        inputHidden.value = returnUrl;
+                        form.appendChild(inputHidden);
+                    }
+
+                    modal.show();
+                });
+            });
+        });
+    </script>
+}

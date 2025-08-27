@@ -1,0 +1,45 @@
+﻿@model Turnos.C.Models.ViewModels.GenericUserViewModel
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<h1>Editar Usuario</h1>
+
+<form asp-action="EditGenerico" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Apellido"></label>
+        <input asp-for="Apellido" class="form-control" />
+        <span asp-validation-for="Apellido" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DNI"></label>
+        <input asp-for="DNI" class="form-control" />
+        <span asp-validation-for="DNI" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Role" />
+    <div class="mt-4">
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

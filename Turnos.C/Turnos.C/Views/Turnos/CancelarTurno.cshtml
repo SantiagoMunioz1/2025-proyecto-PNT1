@@ -1,0 +1,42 @@
+﻿@model Turnos.C.Models.ViewModels.CancelarTurno
+
+@{
+    ViewData["Title"] = "Cancelar Turno";
+}
+
+<h1>Cancela tu turno</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if (!string.IsNullOrEmpty(ViewBag.Mensaje as string))
+        {
+            <div class="alert alert-warning">
+                @ViewBag.Mensaje
+            </div>
+        } else
+        {
+        <form asp-action="CancelarTurnoConfirm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="DescripcionCancelacion" class="control-label"></label>
+                    <textarea asp-for="DescripcionCancelacion" class="form-control"></textarea>
+                    <span asp-validation-for="DescripcionCancelacion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Confirmar" class="btn btn-primary mt-3" />
+                </div>
+        </form>
+        }
+    </div>
+</div>
+
+<div>
+    <a class="nav-link" asp-action="MisTurnos">Atras</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Turnos.C.Models.Profesional>
+
+@{
+    ViewData["Title"] = "Profesionales agrupados por prestación";
+    var grouped = Model.GroupBy(p => p.Prestacion?.Nombre ?? "Sin prestación");
+    int accordionId = 0;
+    bool esAdmin = User.IsInRole("Admin");
+}
+
+<h2 class="mb-4 text-primary">Profesionales</h2>
+
+<div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar profesionales..." />
+</div>
+
+<div class="accordion" id="accordionPrestaciones">
+    @foreach (var grupo in grouped)
+    {
+        string collapseId = "collapse" + accordionId;
+        string headingId = "heading" + accordionId;
+        accordionId++;
+
+        <div class="accordion-item" data-prestacion="@grupo.Key.ToLower()">
+            <h2 class="accordion-header" id="@headingId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                    @grupo.Key (@grupo.Count())
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId" data-bs-parent="#accordionPrestaciones">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        @foreach (var profesional in grupo)
+                        {
+                            <div class="col profesional-item" data-nombre="@($"{profesional.Apellido} {profesional.Nombre}".ToLower())">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        @Html.Partial("_ProfesionalCard", profesional)
+                                    </div>
+                                    @if (esAdmin)
+                                    {
+                                        <div class="card-footer bg-white border-top-0">
+                                            <a asp-controller="Turnos" asp-action="TurnosPorProfesional" asp-route-returnUrl="VerProfesionales" asp-route-id="@profesional.Id"
+                                               class="btn btn-outline-primary w-100">
+                                                <i class="bi bi-calendar-check"></i> Ver turnos
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const filtro = this.value.toLowerCase();
+            const acordeones = document.querySelectorAll('#accordionPrestaciones .accordion-item');
+
+            acordeones.forEach(acordeon => {
+                let prestacion = acordeon.getAttribute('data-prestacion');
+                let mostrarAcordeon = false;
+
+                const profesionales = acordeon.querySelectorAll('.profesional-item');
+
+                profesionales.forEach(prof => {
+                    let nombre = prof.getAttribute('data-nombre');
+                    if (nombre.includes(filtro)) {
+                        prof.style.display = '';
+                        mostrarAcordeon = true;
+                    } else {
+                        prof.style.display = 'none';
+                    }
+                });
+
+                acordeon.style.display = mostrarAcordeon ? '' : 'none';
+            });
+        });
+    </script>
+}

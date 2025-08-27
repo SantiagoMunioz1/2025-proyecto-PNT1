@@ -1,0 +1,32 @@
+﻿@model Turnos.C.Models.Prestacion
+
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">@Model.Nombre</h4>
+    </div>
+
+    <div class="card-body">
+        <p class="mb-2"><strong>Descripción:</strong> @Model.Descripcion</p>
+
+        <p class="mb-1"><strong>Costo:</strong> @string.Format("${0:N2}", Model.Precio)</p>
+
+        <p class="mb-3"><strong>Duración típica:</strong> @Model.Duracion minutos</p>
+
+        @if (Model.Profesionales.Any())
+        {
+            <p class="mb-2"><strong>Profesionales que la brindan:</strong></p>
+            <ul class="list-group list-group-flush">
+                @foreach (var prof in Model.Profesionales.OrderBy(pr => pr.Apellido).ThenBy(pr => pr.Nombre))
+                {
+                    <li class="list-group-item">
+                        @prof.Apellido, @prof.Nombre – <a href="mailto:@prof.Email">@prof.Email</a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No hay profesionales asignados.</p>
+        }
+    </div>
+</div>

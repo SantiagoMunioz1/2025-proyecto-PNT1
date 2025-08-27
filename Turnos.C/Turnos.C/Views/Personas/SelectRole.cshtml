@@ -1,0 +1,22 @@
+﻿@model Turnos.C.Models.ViewModels.PersonaViewModel
+
+@{
+    ViewData["Title"] = "Seleccionar rol";
+}
+
+<h2>Seleccione el tipo de persona a crear</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="SelectedRole">Rol</label>
+        <select asp-for="SelectedRole" asp-items="Model.Roles" class="form-control">
+            <option value="">-- Seleccione un rol --</option>
+        </select>
+        <span asp-validation-for="SelectedRole" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Continuar</button>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,27 @@
+﻿@model Turnos.C.Models.ViewModels.DireccionViewModel
+
+<h4>Dirección</h4>
+
+<div class="form-group">
+    <label asp-for="Calle"></label>
+    <input asp-for="Calle" class="form-control" />
+    <span asp-validation-for="Calle" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Altura"></label>
+    <input asp-for="Altura" class="form-control" type="number" />
+    <span asp-validation-for="Altura" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Piso"></label>
+    <input asp-for="Piso" class="form-control" type="number" />
+    <span asp-validation-for="Piso" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Departamento"></label>
+    <input asp-for="Departamento" class="form-control" />
+    <span asp-validation-for="Departamento" class="text-danger"></span>
+</div>

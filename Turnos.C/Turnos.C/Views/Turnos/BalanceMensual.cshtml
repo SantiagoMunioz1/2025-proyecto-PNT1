@@ -1,0 +1,44 @@
+﻿@model BalanceMensual
+
+@{
+    ViewData["Title"] = "Balance Mensual";
+}
+
+<h2 class="mb-4 text-primary">Balance</h2>
+
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+        <h5 class="card-title">Prestación</h5>
+        <p class="card-text fs-5">@Model.NombrePrestacion</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-primary shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Mes pasado (@Model.MesCalculado)</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Cantidad de turnos confirmados:</strong> @Model.CantidadTurnos</p>
+                <p><strong>Valor por turno:</strong> @Model.ValorTurno.ToString("C0")</p>
+                <hr />
+                <p class="fs-4 fw-bold">Total mensual: @Model.Total.ToString("C0")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-success shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Estimación del mes actual (@Model.MesActualNombre)</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Turnos confirmados hasta hoy:</strong> @Model.TurnosMesActual</p>
+                <p><strong>Valor por turno:</strong> @Model.ValorTurno.ToString("C0")</p>
+                <hr />
+                <p class="fs-4 fw-bold">Total estimado hasta la fecha: @Model.TotalEstimadoActual.ToString("C0")</p>
+            </div>
+        </div>
+    </div>
+</div>
+

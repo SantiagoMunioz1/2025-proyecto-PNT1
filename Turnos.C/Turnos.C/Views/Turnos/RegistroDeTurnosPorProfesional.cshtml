@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Turnos.C.Models.ViewModels.TurnoProfesionalViewModel>
+
+@{
+    ViewData["Title"] = "Registro de Turnos";
+}
+
+<h1>Registro de Turnos</h1>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No hay turnos registrados.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Paciente</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var turno in Model)
+            {
+                <tr>
+                    <td>@turno.Fecha.ToString("g")</td>
+                    <td><span class="@turno.ClaseEstado">@turno.Estado</span></td>
+                    <td>@turno.PacienteNombre</td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-id="@turno.Id"
+                           asp-route-returnUrl="@Url.Action("RegistroDeTurnosPorProfesional")"
+                           class="btn btn-info btn-sm me-1">Detalles</a>
+                        @if (turno.Estado != "Cancelado" && turno.Estado != "Finalizado")
+                        {
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm btn-cancelar"
+                                    data-action="@Url.Action("CancelarTurnoIndividual", new { id = turno.Id })"
+                                    data-requiere-fecha="false"
+                                    data-return-url="@Url.Action("RegistroDeTurnosPorProfesional")">
+                                Cancelar
+                            </button>
+
+                            @if (turno.Estado == "Pendiente de confirmación")
+                            {
+                                <form asp-action="ConfirmarTurnoIndividual"
+                                      asp-route-id="@turno.Id"
+                                      asp-route-returnUrl="@Url.Action("RegistroDeTurnosPorProfesional")"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                                </form>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Modal genérico de cancelación -->
+<div class="modal fade" id="modalCancelacion" tabindex="-1" aria-labelledby="modalCancelacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formCancelacion" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelacionLabel">Cancelar turno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Motivo de cancelación:</label>
+                        <input type="text" name="descripcionCancelacion" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalElement = document.getElementById("modalCancelacion");
+            const modal = new bootstrap.Modal(modalElement);
+            const form = document.getElementById("formCancelacion");
+
+            document.querySelectorAll(".btn-cancelar").forEach(button => {
+                button.addEventListener("click", function () {
+                    const action = button.getAttribute("data-action");
+                    const returnUrl = button.getAttribute("data-return-url");
+
+                    form.action = action;
+
+                    // Limpiar returnUrl anteriores
+                    form.querySelectorAll("input[name='returnUrl']").forEach(el => el.remove());
+
+                    if (returnUrl) {
+                        const inputHidden = document.createElement("input");
+                        inputHidden.type = "hidden";
+                        inputHidden.name = "returnUrl";
+                        inputHidden.value = returnUrl;
+                        form.appendChild(inputHidden);
+                    }
+
+                    modal.show();
+                });
+            });
+        });
+    </script>
+}

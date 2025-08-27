@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Turnos.C.Models.Cobertura">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <AssociationLine Name="Paciente" Type="Turnos.C.Models.Paciente" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="1.999" />
+        <Point X="5.625" Y="1.999" />
+        <Point X="5.625" Y="4.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAABAAAACAAQAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Cobertura.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Prestadora" />
+      <Property Name="Paciente" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Direccion">
+    <Position X="10" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAgEAAAAEAABAAAAAAAAAAAAAAAAEACAAAAA=</HashCode>
+      <FileName>Models\Direccion.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Persona" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Formulario">
+    <Position X="2.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAADAAAAEEAQAAgAABAAEAAAAAAAAAIAAAABA=</HashCode>
+      <FileName>Models\Formulario.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Paciente" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Matricula">
+    <Position X="13.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAEAAAAAAAAACEAAABAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\Matricula.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Provincia" />
+      <Property Name="Profesional" />
+      <Property Name="Tipo" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Paciente">
+    <Position X="5.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\Paciente.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Cobertura" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Formularios" />
+      <Property Name="Turnos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Persona">
+    <Position X="6.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAEEACAAgABAAAEAAAAAAQAAAgAAAAA=</HashCode>
+      <FileName>Models\Persona.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Direccion" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Telefonos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Prestacion">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAgAARACABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Prestacion.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Profesionales" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Profesional">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <InheritanceLine Type="Turnos.C.Models.Persona" FixedToPoint="true">
+      <Path>
+        <Point X="7.5" Y="3.737" />
+        <Point X="7.5" Y="4.378" />
+        <Point X="8.688" Y="4.378" />
+        <Point X="8.688" Y="4.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAEAAAAAAAAAAAAAAEAAAAAAAACAAABAAAAAQ=</HashCode>
+      <FileName>Models\Profesional.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Prestacion" />
+      <Property Name="Matricula" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Turnos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Telefono">
+    <Position X="15.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAEACABAAA=</HashCode>
+      <FileName>Models\Telefono.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TipoTelefono" />
+      <Property Name="Persona" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Turnos.C.Models.Turno">
+    <Position X="6.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAABAAAAEAAQEAAAAAAAAAABAgAAAAAAAAEAA=</HashCode>
+      <FileName>Models\Turno.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Paciente" />
+      <Property Name="Profesional" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Turnos.C.Models.Prestadora" Collapsed="true">
+    <Position X="4.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAIAAAAAAAAgAAAAABAAAAAAA=</HashCode>
+      <FileName>Models\Prestadora.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Turnos.C.Models.Provincia" Collapsed="true">
+    <Position X="13.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIgAAABAAMgAASIQAAAEMAAAAAEAQAACEAAAE=</HashCode>
+      <FileName>Models\Provincia.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Turnos.C.Models.TipoMatricula" Collapsed="true">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAwAAAgAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TipoMatricula.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Turnos.C.Models.TipoTelefono" Collapsed="true">
+    <Position X="12.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAQAAAAAAAAgAAAA=</HashCode>
+      <FileName>Models\Telefono.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Calibri Light" Size="10" />
+</ClassDiagram>

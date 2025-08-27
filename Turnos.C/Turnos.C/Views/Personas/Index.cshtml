@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Turnos.C.Models.Persona>
+
+@{
+    ViewData["Title"] = "Personas";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                @TempData["Mensaje"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <h2 class="text-primary">@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nueva Persona
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No hay personas registradas.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                        <th>@Html.DisplayNameFor(model => model.Apellido)</th>
+                        <th>@Html.DisplayNameFor(model => model.DNI)</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Email</td>
+                            <td>@item.Nombre</td>
+                            <td>@item.Apellido</td>
+                            <td>@item.DNI</td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
+                                    <i class="bi bi-eye"></i> Detalles
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

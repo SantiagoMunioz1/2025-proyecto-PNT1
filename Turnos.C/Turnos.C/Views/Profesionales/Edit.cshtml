@@ -1,0 +1,22 @@
+﻿@model Turnos.C.Models.ViewModels.ProfesionalViewModel
+
+@{
+    ViewData["Title"] = "Editar Profesional";
+}
+
+<h1>Editar Profesional</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <partial name="_FormProfesional" model="Model" />
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

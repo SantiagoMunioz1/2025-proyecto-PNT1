@@ -1,0 +1,51 @@
+﻿@model Turnos.C.Models.Matricula
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Matricula</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NumeroMatricula" class="control-label"></label>
+                <input asp-for="NumeroMatricula" class="form-control" />
+                <span asp-validation-for="NumeroMatricula" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Provincia" class="control-label"></label>
+                <select asp-for="Provincia" class="form-control" asp-items="Html.GetEnumSelectList<Provincia>()">
+                    <option selected="selected" value="">Seleccione la provincia</option>
+                </select>
+                <span asp-validation-for="Provincia" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <select asp-for="Tipo" class="form-control" asp-items="Html.GetEnumSelectList<TipoMatricula>()">
+                    <option selected="selected" value="">Seleccione el tipo de matricula</option>
+                </select>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Profesional</label>
+                <input type="hidden" asp-for="ProfesionalId" />
+                <input class="form-control" value="@ViewBag.ProfesionalNombreCompleto" disabled />
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,76 @@
+﻿@model Turnos.C.Models.Formulario
+
+@{
+    ViewData["Title"] = "Detalles del Formulario";
+    bool esAdmin = User.IsInRole("Admin");
+}
+
+<div class="container">
+    <h2 class="mb-4 fw-bold">Detalles del Formulario</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-borderless mb-0">
+                <tbody>
+                    <tr>
+                        <th scope="row" style="width: 200px;">Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre</th>
+                        <td>
+                            @(Model.Paciente != null
+                                                        ? $"{Model.Paciente.Nombre} {Model.Paciente.Apellido}"
+                                                        : $"{Model.Nombre} {Model.Apellido}")
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fecha</th>
+                        <td>@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">¿Leído?</th>
+                        <td>
+                            @if (Model.Leido)
+                            {
+                                <span class="badge bg-success">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Título</th>
+                        <td>@Model.Titulo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mensaje</th>
+                        <td>@Model.Mensaje</td>
+                    </tr>
+                    @if (esAdmin && Model.Paciente != null)
+                    {
+                        <tr>
+                            <th scope="row">Paciente ID</th>
+                            <td>@Model.PacienteId</td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        @if (esAdmin)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil-square"></i> Editar
+            </a>
+        }
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>

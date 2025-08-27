@@ -1,0 +1,81 @@
+﻿@model Turnos.C.Models.ViewModels.PacienteViewModel
+
+@inject SignInManager<Persona> SignInManager
+@inject UserManager<Persona> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    bool esPaciente = await UserManager.IsInRoleAsync(user, Config.PacienteRolName);
+
+    bool bloquearNombre = esPaciente && !string.IsNullOrWhiteSpace(Model.Nombre);
+    bool bloquearApellido = esPaciente && !string.IsNullOrWhiteSpace(Model.Apellido);
+    bool bloquearDNI = esPaciente && !string.IsNullOrWhiteSpace(Model.DNI);
+    bool bloquearEmail = esPaciente && !string.IsNullOrWhiteSpace(Model.Email);
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <ul class="text-danger">
+        @foreach (var kvp in ViewData.ModelState)
+        {
+            if (kvp.Value.Errors.Count > 0)
+            {
+                <li>@kvp.Key: @string.Join(", ", kvp.Value.Errors.Select(e => e.ErrorMessage))</li>
+            }
+        }
+    </ul>
+}
+
+
+<!-- NOMBRE -->
+<div class="form-group">
+    <label asp-for="Nombre"></label>
+    <input asp-for="Nombre" class="form-control" readonly="@(bloquearNombre ? "readonly" : null)" />
+    <span asp-validation-for="Nombre" class="text-danger"></span>
+</div>
+
+<!-- APELLIDO -->
+<div class="form-group">
+    <label asp-for="Apellido"></label>
+    <input asp-for="Apellido" class="form-control" readonly="@(bloquearApellido ? "readonly" : null)" />
+    <span asp-validation-for="Apellido" class="text-danger"></span>
+</div>
+
+<!-- EMAIL -->
+<div class="form-group">
+    <label asp-for="Email"></label>
+    <input asp-for="Email" class="form-control" readonly="@(bloquearEmail ? "readonly" : null)" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<!-- DNI -->
+<div class="form-group">
+    <label asp-for="DNI"></label>
+    <input asp-for="DNI" class="form-control" readonly="@(bloquearDNI ? "readonly" : null)" />
+    <span asp-validation-for="DNI" class="text-danger"></span>
+</div>
+
+
+
+
+<h4>Teléfonos</h4>
+@await Html.PartialAsync("~/Views/Telefonos/_FormTelefonos.cshtml", Model.Telefonos)
+
+<hr />
+<h4>Cobertura</h4>
+
+<div class="form-group">
+    <label asp-for="NuevaCoberturaNumeroCredencial"></label>
+    <input asp-for="NuevaCoberturaNumeroCredencial" class="form-control" />
+    <span asp-validation-for="NuevaCoberturaNumeroCredencial" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="NuevaCoberturaPrestadora"></label>
+    <select asp-for="NuevaCoberturaPrestadora" class="form-control" asp-items="Html.GetEnumSelectList<Prestadora>()">
+        <option value="">-- Seleccionar --</option>
+    </select>
+    <span asp-validation-for="NuevaCoberturaPrestadora" class="text-danger"></span>
+</div>
+
+@await Html.PartialWithPrefixAsync("~/Views/Direcciones/_FormDireccion.cshtml", Model.Direccion, "Direccion")

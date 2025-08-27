@@ -1,0 +1,162 @@
+﻿@{
+    //razor engine (motor razor) ---> con el @ le "indicamos" que el codigo contenido dentro de las {} es c#
+    ViewData["Title"] = "Home Page";
+}
+
+@if(ViewBag.Mensaje != null)
+{
+    <div>
+        <p class="text-info">@ViewBag.Mensaje</p>
+    </div>
+
+}
+@if (TempData["Mensaje"] != null)
+{
+    var mensaje = TempData["Mensaje"].ToString();
+    var cantidad = 0;
+
+    if (mensaje.Contains("Se desactivaron"))
+    {
+        var partes = mensaje.Split(' ');
+        int.TryParse(partes[2], out cantidad);
+        if (cantidad > 0 || ViewContext.RouteData.Values["controller"].ToString() == "Turnos")
+        {
+            <div class="alert alert-success">@mensaje</div>
+        }
+    } else
+    {
+        <div class="alert alert-warning text-center">
+            @TempData["Mensaje"]
+        </div>
+    }
+}
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="text-center">
+                <h1 class="display-4 fw-bold">Bienvenido/a @ViewBag.Nombre a Clínica ORT</h1>
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                <h1 class="display-4 fw-bold">Bienvenidos a Clínica ORT</h1>
+            </div>
+        }
+        <p class="lead text-muted">
+            Innovamos la atención médica digital. Reservá tus turnos, accedé a profesionales y gestioná tu salud desde un solo lugar.
+        </p>
+    </div>
+    @if (ViewBag.DbVacia == true)
+    {
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow h-100" style="background-color: #f2f6fa;">
+                    <div class="card-body">
+                        <h5 class="card-title">No tenés nada cargado en tu DB local</h5>
+                        <a href="/PreCarga/Seed" id="btnPreCarga" class="btn btn-sm btn-outline-info">
+                            Pre Carga DB
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100" style="background-color: #f2f6fa;">
+                <div class="card-body">
+                    <h5 class="card-title">Atención personalizada</h5>
+                    <p class="card-text text-muted">
+                        Nuestro equipo de especialistas está disponible para ayudarte en cada paso.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100" style="background-color: #e9eff5;">
+                <div class="card-body">
+                    <h5 class="card-title">Turnos online</h5>
+                    <p class="card-text text-muted">
+                        Elegí el día, hora y profesional sin demoras ni llamadas telefónicas.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100" style="background-color: #f2f6fa;">
+                <div class="card-body">
+                    <h5 class="card-title">Historial clínico seguro</h5>
+                    <p class="card-text text-muted">
+                        Accedé a tus consultas y estudios con total privacidad desde tu cuenta.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-10 offset-md-1">
+            <div class="rounded p-4 shadow-sm" style="background-color: #f8f9fa;">
+                <h4 class="fw-semibold mb-3 text-center">Comprometidos con tu bienestar</h4>
+                <p class="text-muted mb-3">
+                    En Clínica ORT creemos en una atención médica accesible, cálida y de calidad. Contamos con más de 20 años de experiencia acompañando a familias y pacientes con profesionalismo y empatía.
+                </p>
+                <p class="text-muted mb-3">
+                    Nuestra misión es brindar servicios de salud integrales a través de tecnología de última generación y un equipo humano comprometido con la excelencia médica. Nos esforzamos por reducir tiempos de espera, facilitar el acceso al historial clínico y fomentar la prevención como eje central de la atención.
+                </p>
+                <p class="text-muted">
+                    Ya sea en nuestras instalaciones o desde la comodidad de tu casa, podés contar con nosotros para cuidar lo que más importa: tu salud.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col text-center">
+            <p class="text-muted">
+                📍 <strong>Clínica ORT - Av. Siempre Viva 1234, Villa Crespo, CABA, Argentina</strong>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal genérico de PreCarga -->
+<div class="modal fade" id="modalPreCarga" tabindex="-1" aria-labelledby="modalPreCargaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPreCargaLabel">Populando base de datos</h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="spinner-border text-info" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3">Estamos precargando la base de datos. Por favor, esperá...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            const btnPreCarga = document.getElementById("btnPreCarga");
+            const modal = new bootstrap.Modal(document.getElementById("modalPreCarga"));
+
+            btnPreCarga.addEventListener("click", function (e) {
+                e.preventDefault();
+                modal.show();
+
+                setTimeout(() => {
+                    window.location.href = btnPreCarga.href;
+                }, 500);
+            });
+        });
+    </script>
+}

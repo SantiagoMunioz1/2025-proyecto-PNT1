@@ -1,0 +1,30 @@
+﻿@model Turnos.C.Models.ViewModels.PacienteViewModel
+
+@{
+    ViewData["Title"] = "Editar Paciente";
+}
+
+@inject UserManager<Persona> UserManager
+@{
+    ViewData["Title"] = "Editar Paciente";
+    bool esAdmin = User.IsInRole(Config.AdminRolName);
+}
+
+<h1>Editar Paciente</h1>
+
+<form asp-action="@ViewData["FormAction"]" method="post">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_FormPaciente" model="Model" />
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a asp-controller="@(esAdmin ? "Pacientes" : "Home")"
+           asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+    
+
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

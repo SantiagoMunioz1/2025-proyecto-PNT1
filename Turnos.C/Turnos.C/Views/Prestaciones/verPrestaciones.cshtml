@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Turnos.C.Models.Prestacion>
+
+@{
+    ViewData["Title"] = "Prestaciones disponibles";
+}
+
+<h2 class="mb-4 text-primary">Prestaciones Ofrecidas</h2>
+
+@foreach (var p in Model)
+{
+    @Html.Partial("_PrestacionCard", p)
+}

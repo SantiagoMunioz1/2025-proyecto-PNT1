@@ -1,0 +1,95 @@
+﻿@model Turnos.C.Models.Formulario
+
+@{
+    ViewData["Title"] = "Crear Formulario";
+    var userLogged = ViewBag.IsAuthenticated ?? false;
+    var esAdmin = User.IsInRole("Admin");
+    var tieneForms = ViewBag.HasForms ?? false;
+}
+
+<h2 class="mb-4 text-primary">Crear Formulario</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            @if (!userLogged)
+            {
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Apellido" class="form-label"></label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="DNI" class="form-label"></label>
+                    <input asp-for="DNI" class="form-control" />
+                    <span asp-validation-for="DNI" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                if (esAdmin)
+                {
+                    <div class="form-group mb-3">
+                        <label asp-for="PacienteId" class="form-label">Paciente</label>
+                        <select asp-for="PacienteId" class="form-control" asp-items="ViewBag.Pacientes">
+                            <option value="">Seleccione un paciente</option>
+                        </select>
+                        <span asp-validation-for="PacienteId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group mb-3">
+                        <label class="form-label">Datos del paciente</label>
+                        <p class="form-control-plaintext">@User.Identity.Name</p>
+                    </div>
+                }
+            }
+
+            <div class="form-group mb-3">
+                <label asp-for="Titulo" class="form-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Mensaje" class="form-label"></label>
+                <textarea asp-for="Mensaje" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Mensaje" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="bi bi-send"></i> Enviar
+                </button>
+                @if (tieneForms)
+                {
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

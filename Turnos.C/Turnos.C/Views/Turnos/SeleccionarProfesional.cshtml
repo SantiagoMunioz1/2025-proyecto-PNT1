@@ -1,0 +1,35 @@
+﻿@model Turnos.C.Models.ViewModels.SeleccionarProfesional
+
+@{
+    ViewData["Title"] = "Sacar turno";
+}
+
+<h1>Saca tu turno</h1>
+
+<h4>Selecciona un profesional</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SeleccionarProfesional">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="ProfesionalId" class="control-label"></label>
+                <select asp-for="ProfesionalId" class="form-control" asp-items="Model.Profesionales"></select>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Siguiente" class="btn btn-primary mt-3" />
+                </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="nav-link" asp-controller="Turnos" asp-action="SeleccionarPrestacion">Volver atras</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

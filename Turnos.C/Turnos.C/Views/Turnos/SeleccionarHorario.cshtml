@@ -1,0 +1,40 @@
+﻿@model Turnos.C.Models.ViewModels.SeleccionarHorario
+
+@{
+    ViewData["Title"] = "Sacar turno";
+}
+
+<h1>Saca tu turno</h1>
+
+<h4>Selecciona un horario</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SeleccionarHorario" method="post">
+            <div class="form-group">
+                <label for="SelectedHorario">Seleccione un horario</label>
+                <select asp-for="SelectedHorario" class="form-control">
+                    <option value="">Seleccione un horario</option>
+                    @foreach (var horario in Model.HorariosDisponibles)
+                    {
+                        <option value="@horario.ToString("s")">
+                            @horario.ToString("dddd dd/MM/yyyy HH:mm")
+                        </option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Confirmar</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="nav-link" asp-action="SeleccionarProfesional">Volver atras</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Turnos.C.Models.Formulario>
+
+
+@{
+    ViewData["Title"] = "Formularios";
+    bool esAdmin = User.IsInRole("Admin");
+    bool esProfesional = User.IsInRole("Profesional");
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning text-center">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Formularios</h2>
+
+    @if (Model.Any() && !esProfesional)
+    {
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Crear nuevo
+        </a>
+    }
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+                    <th>@Html.DisplayNameFor(model => model.Leido)</th>
+                    <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+                    <th>Paciente</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (item.Leido)
+                            {
+                                <span class="badge bg-success">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </td>
+                        <td>@item.Titulo</td>
+                        <td>@(item.Paciente != null ? $"{item.Paciente.Nombre} {item.Paciente.Apellido}" : $"{item.Nombre} {item.Apellido}")</td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm" title="Detalles">
+                                    <i class="bi bi-eye">Ver detalles</i>
+                                </a>
+                                @if (esAdmin)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="text-center mt-4">
+        @if (!esProfesional && !esAdmin)
+        {
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">No tenés ningún formulario cargado</h5>
+                            <a asp-action="Create" asp-controller="Formularios" class="btn btn-outline-info">
+                                <i class="bi bi-send"></i> Enviar formulario
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">Aún no hay formularios cargados.</div>
+
+            @if (esAdmin)
+            {
+                <a asp-action="Create" class="btn btn-primary mt-3">
+                    <i class="bi bi-plus-circle"></i> Crear nuevo
+                </a>
+            }
+        }
+    </div>
+}
+

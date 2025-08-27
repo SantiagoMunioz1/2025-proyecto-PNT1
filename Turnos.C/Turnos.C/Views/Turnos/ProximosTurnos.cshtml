@@ -1,0 +1,212 @@
+﻿@model Turnos.C.Models.ViewModels.TurnosPorDiaProfesional
+
+@{
+    ViewData["Title"] = "Mis Turnos";
+}
+
+<h1>Mis Turnos</h1>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+
+@if (Model.ProximosTurnos.Any())
+{
+    <form asp-action="ConfirmarProximaSemana" method="post" class="mb-3">
+        <button type="submit" class="btn btn-success">Confirmar Turnos de la Próxima Semana</button>
+    </form>
+
+    <button type="button"
+            class="btn btn-danger btn-cancelar"
+            data-action="@Url.Action("CancelarProximaSemana")"
+            data-requiere-fecha="false">
+        Cancelar Turnos de la Próxima Semana
+    </button>
+
+    <div id="mensajeErrorFecha" class="alert alert-danger d-none mt-3" role="alert">
+        Por favor, seleccioná una fecha para cancelar ese día.
+    </div>
+
+    <form method="post" class="mb-4 row g-2">
+        <div class="col-md-3">
+            <label for="fecha" class="form-label">Confirmación/Cancelación por día específico:</label>
+            <input type="date" name="fecha" id="inputFechaDia" class="form-control" required />
+        </div>
+        <div class="col-md-4 align-self-end">
+            <button formaction="@Url.Action("ConfirmarTurnosPorDia")" class="btn btn-success me-2">Confirmar ese día</button>
+            <button type="button"
+                    class="btn btn-danger btn-cancelar"
+                    data-action="@Url.Action("CancelarTurnosPorDia")"
+                    data-requiere-fecha="true">
+                Cancelar ese día
+            </button>
+        </div>
+    </form>
+}
+
+@if (Model.TurnosDeHoy.Any())
+{
+    <h2>Turnos de Hoy</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Paciente</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TurnosDeHoy)
+            {
+                <tr>
+                    <td>@item.Fecha.ToString("g")</td>
+                    <td><span class="@item.ClaseEstado">@item.Estado</span></td>
+                    <td>@item.PacienteNombre</td>
+                    <td>
+                        @if (item.Estado == "Pendiente de confirmación")
+                        {
+                            <form asp-action="ConfirmarTurnoIndividual" asp-route-id="@item.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                            </form>
+                        }
+                        <button type="button"
+                                class="btn btn-danger btn-sm btn-cancelar me-1"
+                                data-action="@Url.Action("CancelarTurnoIndividual", new { id = item.Id })"
+                                data-requiere-fecha="false"
+                                data-return-url="@Url.Action("ProximosTurnos")">
+                            Cancelar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">No hay turnos para el día de hoy.</div>
+}
+
+<h2>Próximos Turnos</h2>
+
+@if (Model.ProximosTurnos.Any())
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Paciente</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProximosTurnos)
+            {
+                <tr>
+                    <td>@item.Fecha.ToString("g")</td>
+                    <td><span class="@item.ClaseEstado">@item.Estado</span></td>
+                    <td>@item.PacienteNombre</td>
+                    <td>
+                        @if (item.Estado == "Pendiente de confirmación")
+                        {
+                            <form asp-action="ConfirmarTurnoIndividual" asp-route-id="@item.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                            </form>
+                        }
+                        <button type="button"
+                                class="btn btn-danger btn-sm btn-cancelar me-1"
+                                data-action="@Url.Action("CancelarTurnoIndividual", new { id = item.Id })"
+                                data-requiere-fecha="false"
+                                data-return-url="@Url.Action("ProximosTurnos")">
+                            Cancelar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">No hay turnos futuros.</div>
+}
+
+<!-- Modal genérico de cancelación -->
+<div class="modal fade" id="modalCancelacion" tabindex="-1" aria-labelledby="modalCancelacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formCancelacion" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelacionLabel">Cancelar turno(s)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Motivo de cancelación:</label>
+                        <input type="text" name="descripcionCancelacion" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalElement = document.getElementById("modalCancelacion");
+            const modal = new bootstrap.Modal(modalElement);
+            const form = document.getElementById("formCancelacion");
+            const mensajeError = document.getElementById("mensajeErrorFecha");
+
+            document.querySelectorAll(".btn-cancelar").forEach(button => {
+                button.addEventListener("click", function (e) {
+                    const action = button.getAttribute("data-action");
+                    const requiereFecha = button.getAttribute("data-requiere-fecha") === "true";
+
+                    // Limpiar errores y inputs previos
+                    mensajeError?.classList.add("d-none");
+                    form.querySelectorAll("input[name='fecha']").forEach(el => el.remove());
+
+                    if (requiereFecha) {
+                        const fechaInput = document.getElementById("inputFechaDia");
+                        const fechaSeleccionada = fechaInput?.value;
+
+                        if (!fechaSeleccionada) {
+                            mensajeError?.classList.remove("d-none");
+                            return; // No continuar ni abrir el modal
+                        }
+
+                        const inputHidden = document.createElement("input");
+                        inputHidden.type = "hidden";
+                        inputHidden.name = "fecha";
+                        inputHidden.value = fechaSeleccionada;
+                        form.appendChild(inputHidden);
+                    }
+
+                    // Limpiar inputs anteriores de returnUrl
+                    form.querySelectorAll("input[name='returnUrl']").forEach(el => el.remove());
+
+                    const returnUrl = button.getAttribute("data-return-url");
+                    if (returnUrl) {
+                        const inputHidden = document.createElement("input");
+                        inputHidden.type = "hidden";
+                        inputHidden.name = "returnUrl";
+                        inputHidden.value = returnUrl;
+                        form.appendChild(inputHidden);
+                    }
+
+                    form.action = action;
+                    modal.show();
+                });
+            });
+        });
+    </script>
+}

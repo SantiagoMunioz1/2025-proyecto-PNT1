@@ -1,0 +1,14 @@
+﻿@model Turnos.C.Models.Profesional
+
+<div class="card shadow-sm mb-3 border-0">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Apellido, @Model.Nombre</h5>
+
+        <p class="mb-2"><strong>Email:</strong> <a href="mailto:@Model.Email">@Model.Email</a></p>
+
+        <p class="mb-1">
+            <strong>Horario de trabajo:</strong>
+            @Model.HoraInicio.ToString("hh:mm tt") - @Model.HoraFin.ToString("hh:mm tt")
+        </p>
+    </div>
+</div>

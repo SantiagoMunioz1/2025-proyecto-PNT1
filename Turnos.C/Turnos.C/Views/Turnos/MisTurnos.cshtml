@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Turnos.C.Models.ViewModels.TurnoPacienteViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Mis turnos</h1>
+
+@{
+    var turnoExitoso = TempData["TurnoExitoso"] as bool?;
+}
+
+@if (turnoExitoso == true && !string.IsNullOrEmpty(ViewBag.Mensaje as string))
+{
+    <div class="alert alert-success">
+        @ViewBag.Mensaje
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(TempData["ErrorTurno"] as string))
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorTurno"]
+    </div>
+}
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Prestación</th>
+                <th>Estado</th>
+                <th>Profesional</th>
+                <th>Motivo Cancelación</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.PrestacionNombre</td>
+                    <td>
+                        <span class="@item.ClaseEstado">@item.Estado</span>
+                    </td>
+                    <td>
+                        @item.ProfesionalNombre
+                    </td>
+                    <td>
+                        @item.DescripcionCancelacion
+                    </td>
+                    <td>
+                        @if (!item.PuedeCancelar)
+                        {
+                            <span class="text-muted" title="No se puede cancelar un turno con menos de 24hs de antelación, o cancelar un turno cancelado">Cancelar</span>
+                        }
+                        else
+                        {
+                            <a asp-action="CancelarTurno" asp-route-id="@item.Id">Cancelar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow h-100" style="background-color: #f2f6fa;">
+                <div class="card-body">
+                    <h5 class="card-title">No tenés ningun turno asignado</h5>
+                    <a asp-action="SeleccionarPrestacion" asp-controller="Turnos" class="btn btn-sm btn-outline-info">
+                        Sacar turno
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

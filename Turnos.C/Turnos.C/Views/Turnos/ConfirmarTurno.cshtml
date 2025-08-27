@@ -1,0 +1,35 @@
+﻿@model Turnos.C.Models.ViewModels.ConfirmarTurno
+
+@{
+    ViewData["Title"] = "Sacar turno";
+}
+
+<h1>Saca tu turno</h1>
+
+<h4>Confirma tu turno</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <p><strong>Prestación:</strong> @Model.PrestacionNombre</p>
+                <p><strong>Profesional:</strong> @Model.ProfesionalNombre</p>
+                <p><strong>Fecha y hora:</strong> @Model.FechaHora.ToString("dddd dd/MM/yyyy HH:mm")</p>
+            </div>
+        </div>
+
+        <form asp-action="ConfirmarTurnoPost" method="post">
+            <button type="submit" class="btn btn-success mt-3">Confirmar Turno</button>
+            <a asp-action="SeleccionarPrestacion" class="btn btn-secondary mt-3">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="nav-link" asp-action="SeleccionarHorario">Volver atras</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

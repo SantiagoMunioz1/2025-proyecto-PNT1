@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Turnos.C.Models.Direccion>
+
+@{
+    ViewData["Title"] = "Direcciones";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nueva Dirección
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No hay direcciones registradas.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Calle)</th>
+                        <th>@Html.DisplayNameFor(model => model.Altura)</th>
+                        <th>@Html.DisplayNameFor(model => model.Piso)</th>
+                        <th>@Html.DisplayNameFor(model => model.Departamento)</th>
+                        <th>Persona</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Calle</td>
+                            <td>@item.Altura</td>
+                            <td>@item.Piso</td>
+                            <td>@item.Departamento</td>
+                            <td>@item.Persona?.Apellido</td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">
+                                    <i class="bi bi-eye"></i> Detalles
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

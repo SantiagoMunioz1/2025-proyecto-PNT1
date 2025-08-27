@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Acceso denegado";
+    bool hayReturnUrl = !string.IsNullOrEmpty(ViewBag.ReturnUrl);
+}
+
+<div class="container py-5">
+    <div class="text-center">
+        <h1 class="text-danger mb-4">
+            Actualmente no cuenta con los permisos suficientes
+            @if (hayReturnUrl)
+            {
+                <span>para acceder a <strong>@ViewBag.ReturnUrl</strong></span>
+            }
+        </h1>
+
+        <img src="~/img/acceso denegado.jpg" alt="Acceso denegado" class="img-fluid rounded shadow" style="max-width: 400px;" />
+
+        <p class="mt-4 text-muted">Si cree que esto es un error, por favor contacte al administrador.</p>
+    </div>
+</div>

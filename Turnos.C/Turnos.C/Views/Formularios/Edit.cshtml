@@ -1,0 +1,68 @@
+﻿@model Turnos.C.Models.Formulario
+
+@{
+    ViewData["Title"] = "Editar Formulario";
+}
+
+<div class="container">
+    <h2 class="mb-4 fw-bold">Editar Formulario</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Fecha" class="form-label"></label>
+                    <input asp-for="Fecha" class="form-control" readonly />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Leido" />
+                    <label class="form-check-label" asp-for="Leido">
+                        @Html.DisplayNameFor(model => model.Leido)
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Titulo" class="form-label"></label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Mensaje" class="form-label"></label>
+                    <textarea asp-for="Mensaje" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Mensaje" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PacienteId" class="form-label"></label>
+                    <input asp-for="PacienteId" class="form-control" />
+                    <span asp-validation-for="PacienteId" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar cambios
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

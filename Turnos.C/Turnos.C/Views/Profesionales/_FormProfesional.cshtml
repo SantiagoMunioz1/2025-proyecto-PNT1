@@ -1,0 +1,117 @@
+﻿@model Turnos.C.Models.ViewModels.ProfesionalViewModel
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <ul class="text-danger">
+        @foreach (var kvp in ViewData.ModelState)
+        {
+            if (kvp.Value.Errors.Count > 0)
+            {
+                <li>@kvp.Key: @string.Join(", ", kvp.Value.Errors.Select(e => e.ErrorMessage))</li>
+            }
+        }
+    </ul>
+}
+
+<div class="form-group">
+    <label asp-for="Nombre"></label>
+    <input asp-for="Nombre" class="form-control" />
+    <span asp-validation-for="Nombre" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Apellido"></label>
+    <input asp-for="Apellido" class="form-control" />
+    <span asp-validation-for="Apellido" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Email"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="DNI"></label>
+    <input asp-for="DNI" class="form-control" />
+    <span asp-validation-for="DNI" class="text-danger"></span>
+</div>
+
+<h4>Teléfonos</h4>
+@await Html.PartialAsync("~/Views/Telefonos/_FormTelefonos.cshtml", Model.Telefonos)
+
+<hr />
+<h4>Prestación</h4>
+<div class="form-group">
+    <label>Seleccione una prestación existente:</label>
+    <select asp-for="PrestacionId" asp-items="Model.Prestaciones" class="form-control">
+        <option value="">-- Seleccionar --</option>
+    </select>
+    <span asp-validation-for="PrestacionId" class="text-danger"></span>
+</div>
+
+<p class="text-center font-weight-bold">-- o --</p>
+
+<div class="form-group">
+    <label asp-for="NuevaPrestacionNombre"></label>
+    <input asp-for="NuevaPrestacionNombre" class="form-control" />
+    <span asp-validation-for="NuevaPrestacionNombre" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="NuevaPrestacionDescripcion"></label>
+    <textarea asp-for="NuevaPrestacionDescripcion" class="form-control"></textarea>
+    <span asp-validation-for="NuevaPrestacionDescripcion" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="NuevaPrestacionDuracion"></label>
+    <input asp-for="NuevaPrestacionDuracion" type="number" class="form-control" />
+    <span asp-validation-for="NuevaPrestacionDuracion" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="NuevaPrestacionPrecio"></label>
+    <input asp-for="NuevaPrestacionPrecio" type="number" step="0.01" class="form-control" />
+    <span asp-validation-for="NuevaPrestacionPrecio" class="text-danger"></span>
+</div>
+
+<hr />
+<h4>Horario</h4>
+<div class="form-group">
+    <label asp-for="HoraInicio"></label>
+    <input asp-for="HoraInicio" type="time" class="form-control" />
+    <span asp-validation-for="HoraInicio" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="HoraFin"></label>
+    <input asp-for="HoraFin" type="time" class="form-control" />
+    <span asp-validation-for="HoraFin" class="text-danger"></span>
+</div>
+
+<hr />
+<h4>Matrícula</h4>
+<div class="form-group">
+    <label asp-for="NumeroMatricula"></label>
+    <input asp-for="NumeroMatricula" class="form-control" />
+    <span asp-validation-for="NumeroMatricula" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Provincia"></label>
+    <select asp-for="Provincia" class="form-control"
+            asp-items="Html.GetEnumSelectList<Turnos.C.Models.Provincia>()">
+        <option value="">-- Seleccionar provincia --</option>
+    </select>
+    <span asp-validation-for="Provincia" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Tipo"></label>
+    <select asp-for="Tipo" class="form-control"
+            asp-items="Html.GetEnumSelectList<Turnos.C.Models.TipoMatricula>()">
+        <option value="">-- Seleccionar tipo --</option>
+    </select>
+    <span asp-validation-for="Tipo" class="text-danger"></span>
+</div>

@@ -1,0 +1,19 @@
+﻿@model Turnos.C.Models.ViewModels.PacienteViewModel
+
+@{
+    ViewData["Title"] = "Crear Paciente";
+}
+
+<h1>Crear Paciente</h1>
+
+
+<form asp-action="Create" method="post">
+    <partial name="_FormPaciente" model="Model" />
+
+    <button type="submit" class="btn btn-primary">Crear Paciente</button>
+    <a asp-controller="Pacientes" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
